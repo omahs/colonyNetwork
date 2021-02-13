@@ -42,6 +42,9 @@ step_setup_slither: &step_setup_slither
         chmod +x solc-static-linux
         sudo mv solc-static-linux /usr/local/bin/solc
         sudo pip install slither-analyzer
+        sudo pip install solc-select
+        sudo solc-select install 0.7.3
+        sudo solc-select use 0.7.3
 
 jobs:
   reputation-test:

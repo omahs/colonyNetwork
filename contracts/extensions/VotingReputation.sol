@@ -534,9 +534,8 @@ contract VotingReputation is ColonyExtension, PatriciaTreeProofs {
 
       if (expenditurePastVotes[actionHash] < votePower) {
         expenditurePastVotes[actionHash] = votePower;
-        canExecute = canExecute && true;
       } else {
-        canExecute = canExecute && false;
+        canExecute = false;
       }
     }
 

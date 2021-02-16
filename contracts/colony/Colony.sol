@@ -66,6 +66,7 @@ contract Colony is ColonyStorage, PatriciaTreeProofs, MultiChain {
 
     // Prevent transactions to network-managed extensions installed in this colony
     require(isContract(_to), "colony-to-must-be-contract");
+    // slither-disable-next-line unused-return
     try ColonyExtension(_to).identifier() returns (bytes32 extensionId) {
       require(
         IColonyNetwork(colonyNetworkAddress).getExtensionInstallation(extensionId, address(this)) != _to,

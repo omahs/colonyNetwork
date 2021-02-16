@@ -179,6 +179,7 @@ contract ColonyNetworkMining is ColonyNetworkStorage, MultiChain {
       IMetaColony(metaColony).mintTokensForColonyNetwork(realReward);
     }
 
+    // slither-disable-next-line unused-return
     ERC20Extended(clnyToken).approve(tokenLocking, realReward);
 
     for (i = 0; i < stakers.length; i++) {
@@ -249,9 +250,9 @@ contract ColonyNetworkMining is ColonyNetworkStorage, MultiChain {
     address clnyToken = IMetaColony(metaColony).getToken();
     ITokenLocking(tokenLocking).withdraw(clnyToken, _amount, true);
     if (isXdai()){
-      // On Xdai, I'm burning bridged tokens is certainly not what we want. So let's
-      // send them to the metacolony for now.
-      ERC20Extended(clnyToken).transfer(metaColony, _amount);
+      // On Xdai, I'm burning bridged tokens is certainly not what we want.
+      //   So let's send them to the metacolony for now.
+      require(ERC20Extended(clnyToken).transfer(metaColony, _amount), "colony-network-transfer-failed");
     } else {
       ERC20Extended(clnyToken).burn(_amount);
     }

@@ -196,6 +196,7 @@ contract ReputationMiningCycle is ReputationMiningCycleCommon {
     emit ReputationRootHashSubmitted(msg.sender, _newHash, _nLeaves, _jrh, _entryIndex);
   }
 
+  // slither-disable-next-line suicidal
   function confirmNewHash(uint256 _roundNumber) public
   finalDisputeRoundCompleted(_roundNumber)
   {

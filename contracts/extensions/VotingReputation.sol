@@ -496,7 +496,7 @@ contract VotingReputation is ColonyExtension, PatriciaTreeProofs {
 
     emit MotionEscalated(_motionId, msg.sender, domainId, _newDomainId);
 
-    if (motion.events[STAKE_END] == uint64(block.timestamp)) {
+    if (motion.events[STAKE_END] <= uint64(block.timestamp)) {
       emit MotionEventSet(_motionId, STAKE_END);
     }
   }

@@ -77,6 +77,7 @@ contract DutchAuction is DSMath {
   mapping (address => uint256) public bids;
 
   modifier auctionNotStarted {
+    // slither-disable-next-line incorrect-equality
     require(startTime == 0, "colony-auction-already-started");
     require(!started, "colony-auction-already-started");
     _;

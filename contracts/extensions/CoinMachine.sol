@@ -222,7 +222,7 @@ contract CoinMachine is ColonyExtension {
   function getCurrentPrice() public view returns (uint256) {
     uint256 currentPeriod = getCurrentPeriod();
 
-    if (activePeriod == currentPeriod) {
+    if (activePeriod >= currentPeriod) {
       return activePrice;
 
     // Otherwise, infer the new price
@@ -246,7 +246,7 @@ contract CoinMachine is ColonyExtension {
   function getNumAvailable() public view returns (uint256) {
     return min(
       tokensToSell,
-      sub(maxPerPeriod, ((activePeriod == getCurrentPeriod()) ? activeSold : 0))
+      sub(maxPerPeriod, ((activePeriod >= getCurrentPeriod()) ? activeSold : 0))
     );
   }
 

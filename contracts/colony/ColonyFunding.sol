@@ -598,6 +598,7 @@ contract ColonyFunding is ColonyStorage, PatriciaTreeProofs { // ignore-swc-123
     IColonyNetwork colonyNetworkContract = IColonyNetwork(colonyNetworkAddress);
     uint256 feeInverse = colonyNetworkContract.getFeeInverse();
 
+    // slither-disable-next-line incorrect-equality
     if (_payout == 0 || feeInverse == 1) {
       fee = _payout;
     } else {

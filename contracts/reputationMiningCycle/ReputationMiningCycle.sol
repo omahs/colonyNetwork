@@ -163,6 +163,7 @@ contract ReputationMiningCycle is ReputationMiningCycleCommon {
       nUniqueSubmittedHashes += 1;
       // And add it to the first disputeRound
       // NB if no other hash is submitted, no dispute resolution will be required.
+      // slither-disable-next-line controlled-array-length
       disputeRounds[0].push(DisputedEntry({
         firstSubmitter: msg.sender,
         lastResponseTimestamp: reputationMiningWindowOpenTimestamp + MINING_WINDOW_SIZE,
@@ -187,6 +188,7 @@ contract ReputationMiningCycle is ReputationMiningCycleCommon {
     }
 
     // And add the miner to the array list of submissions here
+    // slither-disable-next-line controlled-array-length
     submittedHashes[_newHash][_nLeaves][_jrh].push(msg.sender);
     // Note that they submitted it.
     submittedEntries[msg.sender][_entryIndex] = true;
@@ -218,6 +220,7 @@ contract ReputationMiningCycle is ReputationMiningCycleCommon {
       submission.nLeaves,
       submittedHashes[submission.proposedNewRootHash][submission.nLeaves][submission.jrh]
     );
+
     selfdestruct(colonyNetworkAddress);
   }
 
@@ -410,6 +413,7 @@ contract ReputationMiningCycle is ReputationMiningCycleCommon {
       amount = MIN_INT128;
     }
 
+    // slither-disable-next-line controlled-array-length
     reputationUpdateLog.push(ReputationLogEntry(
       _user,
       amount, // Potentially adjusted amount to int128 scoe

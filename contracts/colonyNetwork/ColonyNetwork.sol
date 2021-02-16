@@ -244,6 +244,7 @@ contract ColonyNetwork is ColonyNetworkStorage, MultiChain {
         // When we are at an integer power of two steps away from the newly added skill (leaf) node,
         // add the current parent skill to the new skill's parents array
         if (treeWalkingCounter == powerOfTwo) {
+          // slither-disable-next-line controlled-array-length
           skills[skillCount].parents.push(parentSkillId);
           powerOfTwo = powerOfTwo*2;
         }

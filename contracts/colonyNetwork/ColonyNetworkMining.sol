@@ -89,6 +89,7 @@ contract ColonyNetworkMining is ColonyNetworkStorage, MultiChain {
     emit ReputationRootHashSet(newHash, newNLeaves, stakers, totalMinerRewardPerCycle);
   }
 
+  // slither-disable-next-line reentrancy-no-eth
   function initialiseReputationMining() public stoppable {
     require(inactiveReputationMiningCycle == address(0x0), "colony-reputation-mining-already-initialised");
     address clnyToken = IMetaColony(metaColony).getToken();
@@ -102,6 +103,7 @@ contract ColonyNetworkMining is ColonyNetworkStorage, MultiChain {
     emit ReputationMiningInitialised(inactiveReputationMiningCycle);
   }
 
+  // slither-disable-next-line reentrancy-no-eth
   function startNextCycle() public stoppable {
     address clnyToken = IMetaColony(metaColony).getToken();
     require(clnyToken != address(0x0), "colony-reputation-mining-clny-token-invalid-address");

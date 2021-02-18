@@ -60,13 +60,17 @@ contract ColonyNetworkENS is ColonyNetworkStorage, MultiChain {
   {
     require(bytes(username).length > 0, "colony-user-label-invalid");
     require(bytes(userLabels[msg.sender]).length == 0, "colony-user-label-already-owned");
+
     bytes32 subnode = keccak256(abi.encodePacked(username));
-    ENS(ens).setSubnodeOwner(userNode, subnode, address(this));
     bytes32 node = keccak256(abi.encodePacked(userNode, subnode));
-    ENS(ens).setResolver(node, address(this));
+
+    userLabels[msg.sender] = username;
     records[node].addr = msg.sender;
     records[node].orbitdb = orbitdb;
-    userLabels[msg.sender] = username;
+
+    ENS(ens).setSubnodeOwner(userNode, subnode, address(this));
+    ENS(ens).setResolver(node, address(this));
+
     emit UserLabelRegistered(msg.sender, subnode);
   }
 
@@ -78,14 +82,17 @@ contract ColonyNetworkENS is ColonyNetworkStorage, MultiChain {
   {
     require(bytes(colonyName).length > 0, "colony-colony-label-invalid");
     require(bytes(colonyLabels[msg.sender]).length == 0, "colony-already-labeled");
-    bytes32 subnode = keccak256(abi.encodePacked(colonyName));
 
-    ENS(ens).setSubnodeOwner(colonyNode, subnode, address(this));
+    bytes32 subnode = keccak256(abi.encodePacked(colonyName));
     bytes32 node = keccak256(abi.encodePacked(colonyNode, subnode));
-    ENS(ens).setResolver(node, address(this));
+
+    colonyLabels[msg.sender] = colonyName;
     records[node].addr = msg.sender;
     records[node].orbitdb = orbitdb;
-    colonyLabels[msg.sender] = colonyName;
+
+    ENS(ens).setSubnodeOwner(colonyNode, subnode, address(this));
+    ENS(ens).setResolver(node, address(this));
+
     emit ColonyLabelRegistered(msg.sender, subnode);
   }
 

@@ -313,10 +313,6 @@ contract VotingReputation is ColonyExtension, PatriciaTreeProofs {
       "voting-rep-insufficient-stake"
     );
 
-    tokenLocking.deposit(token, 0, true); // Faux deposit to clear any locks
-    colony.obligateStake(msg.sender, motion.domainId, amount);
-    colony.transferStake(_permissionDomainId, _childSkillIndex, address(this), msg.sender, motion.domainId, amount, address(this));
-
     // Update the stake
     motion.stakes[_vote] = add(motion.stakes[_vote], amount);
     stakes[_motionId][msg.sender][_vote] = stakerTotalAmount;
@@ -362,6 +358,10 @@ contract VotingReputation is ColonyExtension, PatriciaTreeProofs {
       emit MotionEventSet(_motionId, STAKE_END);
     }
 
+    // Do the external bookkeeping
+    tokenLocking.deposit(token, 0, true); // Faux deposit to clear any locks
+    colony.obligateStake(msg.sender, motion.domainId, amount);
+    colony.transferStake(_permissionDomainId, _childSkillIndex, address(this), msg.sender, motion.domainId, amount, address(this));
   }
 
   /// @notice Submit a vote secret for a motion

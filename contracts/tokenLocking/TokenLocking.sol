@@ -101,8 +101,6 @@ contract TokenLocking is TokenLockingStorage, DSMath { // ignore-swc-123
   }
 
   function deposit(address _token, uint256 _amount, bool _force) public tokenNotLocked(_token, _force) {
-    require(ERC20Extended(_token).transferFrom(msg.sender, address(this), _amount), "colony-token-locking-transfer-failed"); // ignore-swc-123
-
     Lock storage lock = userLocks[_token][msg.sender];
     lock.balance = add(lock.balance, _amount);
 
@@ -112,6 +110,9 @@ contract TokenLocking is TokenLockingStorage, DSMath { // ignore-swc-123
       delete lock.pendingBalance;
     }
 
+    // Actually claim the tokens
+    require(ERC20Extended(_token).transferFrom(msg.sender, address(this), _amount), "colony-token-locking-transfer-failed"); // ignore-swc-123
+
     emit UserTokenDeposited(_token, msg.sender, lock.balance);
   }
 
@@ -120,8 +121,7 @@ contract TokenLocking is TokenLockingStorage, DSMath { // ignore-swc-123
 
     makeConditionalDeposit(_token, _amount, _recipient);
 
-    Lock storage lock = userLocks[_token][_recipient];
-    emit UserTokenDeposited(_token, _recipient, lock.balance);
+    emit UserTokenDeposited(_token, _recipient, userLocks[_token][_recipient].balance);
   }
 
   function transfer(address _token, uint256 _amount, address _recipient, bool _force) public
@@ -207,6 +207,7 @@ contract TokenLocking is TokenLockingStorage, DSMath { // ignore-swc-123
 
   // Internal functions
 
+  // slither-disable-next-line reentrancy-no-eth
   function makeConditionalDeposit(address _token, uint256 _amount, address _user) internal {
     Lock storage userLock = userLocks[_token][_user];
     if (isTokenUnlocked(_token, _user)) {

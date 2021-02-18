@@ -313,6 +313,7 @@ contract Colony is ColonyStorage, PatriciaTreeProofs, MultiChain {
 
     // Setup new local skill
     IColonyNetwork colonyNetwork = IColonyNetwork(colonyNetworkAddress);
+    // slither-disable-next-line reentrancy-no-eth
     uint256 newLocalSkill = colonyNetwork.addSkill(parentSkillId);
 
     // Add domain to local mapping

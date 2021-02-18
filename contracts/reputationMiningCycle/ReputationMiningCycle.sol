@@ -225,6 +225,7 @@ contract ReputationMiningCycle is ReputationMiningCycleCommon {
     selfdestruct(colonyNetworkAddress);
   }
 
+  // slither-disable-next-line reentrancy-no-eth
   function invalidateHash(uint256 _round, uint256 _idx) public {
     // What we do depends on our opponent, so work out which index it was at in disputeRounds[round]
     uint256 opponentIdx = getOpponentIdx(_idx);
@@ -286,11 +287,17 @@ contract ReputationMiningCycle is ReputationMiningCycleCommon {
         "colony-reputation-mining-user-ineligible-to-respond"
       );
 
+      // Punish the people who proposed the hash that was rejected
+      stakeLost += submittedHashes[submission.proposedNewRootHash][submission.nLeaves][submission.jrh].length * MIN_STAKE;
+      IColonyNetwork(colonyNetworkAddress).punishStakers(
+        submittedHashes[submission.proposedNewRootHash][submission.nLeaves][submission.jrh],
+        MIN_STAKE
+      );
+
       // Work out whether we are invalidating just the supplied idx or its opponent too.
-      bool eliminateOpponent = false;
-      if (disputeRounds[_round][opponentIdx].challengeStepCompleted == disputeRounds[_round][_idx].challengeStepCompleted) {
-        eliminateOpponent = true;
-      }
+      bool eliminateOpponent = (
+        disputeRounds[_round][opponentIdx].challengeStepCompleted == disputeRounds[_round][_idx].challengeStepCompleted
+      );
 
       if (!eliminateOpponent) {
         // If here, then the opponent completed one more challenge round than the submission being invalidated or
@@ -306,24 +313,17 @@ contract ReputationMiningCycle is ReputationMiningCycleCommon {
         nInvalidatedHashes += 2;
 
         // Punish the people who proposed our opponent
+        stakeLost += submittedHashes[opponentSubmission.proposedNewRootHash][opponentSubmission.nLeaves][opponentSubmission.jrh].length * MIN_STAKE;
         IColonyNetwork(colonyNetworkAddress).punishStakers(
           submittedHashes[opponentSubmission.proposedNewRootHash][opponentSubmission.nLeaves][opponentSubmission.jrh],
           MIN_STAKE
         );
-        stakeLost += submittedHashes[opponentSubmission.proposedNewRootHash][opponentSubmission.nLeaves][opponentSubmission.jrh].length * MIN_STAKE;
 
         emit HashInvalidated(opponentSubmission.proposedNewRootHash, opponentSubmission.nLeaves, opponentSubmission.jrh);
       }
 
       // Note that two hashes have completed this challenge round (either one accepted for now and one rejected, or two rejected)
       nHashesCompletedChallengeRound[_round] += 2;
-
-      // Punish the people who proposed the hash that was rejected
-      IColonyNetwork(colonyNetworkAddress).punishStakers(
-        submittedHashes[submission.proposedNewRootHash][submission.nLeaves][submission.jrh],
-        MIN_STAKE
-      );
-      stakeLost += submittedHashes[submission.proposedNewRootHash][submission.nLeaves][submission.jrh].length * MIN_STAKE;
 
       emit HashInvalidated(submission.proposedNewRootHash, submission.nLeaves, submission.jrh);
     }

@@ -2,7 +2,6 @@
 import path from "path";
 import chai from "chai";
 import bnChai from "bn-chai";
-import { ethers } from "ethers";
 import { soliditySha3 } from "web3-utils";
 
 import TruffleLoader from "../../packages/reputation-miner/TruffleLoader";
@@ -85,12 +84,8 @@ contract("Token Locking", (addresses) => {
 
   describe("when depositing tokens", async () => {
     it("should correctly set colony network address", async () => {
-      await tokenLocking.setColonyNetwork(ethers.constants.AddressZero);
-      let colonyNetworkAddress = await tokenLocking.getColonyNetwork();
-      expect(colonyNetworkAddress).to.equal(ethers.constants.AddressZero);
-
       await tokenLocking.setColonyNetwork(colonyNetwork.address);
-      colonyNetworkAddress = await tokenLocking.getColonyNetwork();
+      const colonyNetworkAddress = await tokenLocking.getColonyNetwork();
       expect(colonyNetworkAddress).to.equal(colonyNetwork.address);
     });
 

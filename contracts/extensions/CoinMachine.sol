@@ -119,6 +119,7 @@ contract CoinMachine is ColonyExtension {
     require(_targetPerPeriod > 0, "coin-machine-target-too-small");
     require(_maxPerPeriod >= _targetPerPeriod, "coin-machine-max-too-small");
 
+    // A value of address(0x0) denotes Ether
     purchaseToken = _purchaseToken;
 
     periodLength = _periodLength;

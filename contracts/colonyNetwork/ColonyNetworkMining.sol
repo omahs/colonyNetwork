@@ -260,10 +260,10 @@ contract ColonyNetworkMining is ColonyNetworkStorage, MultiChain {
     }
   }
 
-  function setReputationMiningCycleReward(uint256 _amount) public stoppable
-  calledByMetaColony
-  {
+  function setReputationMiningCycleReward(uint256 _amount) public stoppable calledByMetaColony {
     totalMinerRewardPerCycle = _amount;
+
+    emit ReputationMiningRewardSet(_amount);
   }
 
   function getReputationMiningCycleReward() public view returns (uint256) {

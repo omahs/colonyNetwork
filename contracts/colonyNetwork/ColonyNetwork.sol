@@ -95,6 +95,8 @@ contract ColonyNetwork is ColonyNetworkStorage, MultiChain {
   {
     // Token locking address can't be changed
     require(tokenLocking == address(0x0), "colony-token-locking-address-already-set");
+    require(_tokenLocking != address(0x0), "colony-token-locking-cannot-be-zero");
+
     tokenLocking = _tokenLocking;
 
     emit TokenLockingAddressSet(_tokenLocking);
@@ -108,6 +110,8 @@ contract ColonyNetwork is ColonyNetworkStorage, MultiChain {
   stoppable
   auth
   {
+    require(_miningResolver != address(0x0), "colony-mining-resolver-cannot-be-zero");
+
     miningCycleResolver = _miningResolver;
 
     emit MiningCycleResolverSet(_miningResolver);

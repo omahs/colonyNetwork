@@ -45,10 +45,15 @@ contract ColonyNetworkENS is ColonyNetworkStorage, MultiChain {
   }
 
   function setupRegistrar(address _ens, bytes32 _rootNode) public stoppable auth {
+    require(_ens != address(0x0), "colony-ens-cannot-be-zero");
+
     ens = _ens;
     rootNode = _rootNode;
+
     userNode = keccak256(abi.encodePacked(rootNode, USER_HASH));
     colonyNode = keccak256(abi.encodePacked(rootNode, COLONY_HASH));
+
+    emit RegistrarInitialised(_ens, _rootNode);
   }
 
   function registerUserLabel(string memory username, string memory orbitdb)

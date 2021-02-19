@@ -54,6 +54,8 @@ contract TokenLocking is TokenLockingStorage, DSMath { // ignore-swc-123
   // Public functions
 
   function setColonyNetwork(address _colonyNetwork) public auth {
+    require(_colonyNetwork != address(0x0), "colony-token-locking-network-cannot-be-zero");
+
     colonyNetwork = _colonyNetwork;
 
     emit ColonyNetworkSet(_colonyNetwork);

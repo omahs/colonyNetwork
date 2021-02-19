@@ -119,6 +119,9 @@ contract Colony is ColonyStorage, PatriciaTreeProofs, MultiChain {
     require(colonyNetworkAddress == address(0x0), "colony-already-initialised-network");
     require(token == address(0x0), "colony-already-initialised-token");
 
+    require(_colonyNetworkAddress != address(0x0), "colony-network-cannot-be-zero");
+    require(_token != address(0x0), "colony-token-cannot-be-zero");
+
     colonyNetworkAddress = _colonyNetworkAddress;
     token = _token;
     tokenLockingAddress = IColonyNetwork(colonyNetworkAddress).getTokenLocking();

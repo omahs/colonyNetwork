@@ -63,8 +63,14 @@ async function start() {
   const vOffset = 4;
   const v = parseInt(sig.substring(130), 16) + vOffset;
 
+  let vString;
+  if (v < 16) {
+    vString = `0${v.toString(16)}`;
+  } else {
+    vString = v.toString(16);
+  }
   // put back together
-  const modifiedSig = `0x${r}${s}${v.toString(16)}`;
+  const modifiedSig = `0x${r}${s}${vString}`;
   console.log(modifiedSig);
 
   const res = await gs.checkNSignatures(safeDataHash, safeData, modifiedSig, 1);

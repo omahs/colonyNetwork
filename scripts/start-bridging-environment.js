@@ -15,6 +15,7 @@ const loader = new TruffleLoader({
 });
 
 const ADDRESS_ZERO = ethers.constants.AddressZero;
+const ethersForeignProvider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8546");
 const ethersForeignSigner = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8546").getSigner();
 const ethersHomeSigner = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545").getSigner();
 const ethersHomeProvider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545");
@@ -55,7 +56,7 @@ async function start() {
   const safeDataHash = await gs.getTransactionHash(...safeTxArgs);
 
   // const sig = await web3.eth.sign(safeDataHash, accounts[0]);
-  const sig = await ethersHomeProvider.send("eth_sign", [accounts[0], safeDataHash]);
+  const sig = await ethersForeignProvider.send("eth_sign", [accounts[0], safeDataHash]);
   const r = `${sig.substring(2, 66)}`;
   const s = `${sig.substring(66, 130)}`;
 
@@ -107,7 +108,7 @@ async function start() {
 }
 
 async function getGanacheAccounts() {
-  return ethersHomeProvider.listAccounts();
+  return ethersForeignProvider.listAccounts();
 }
 
 start();

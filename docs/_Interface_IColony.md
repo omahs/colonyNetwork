@@ -4,7 +4,7 @@ section: Interface
 order: 3
 ---
 
-
+  
 ## Interface Methods
 
 ### `addDomain`
@@ -1258,7 +1258,7 @@ Move a given amount: `_amount` of `_token` funds from funding pot with id `_from
 |_permissionDomainId|uint256|The domainId in which I have the permission to take this action
 |_childSkillIndex|uint256|The child index in _permissionDomainId where I will be taking this action
 |_domainId|uint256|The domain where I am taking this action, pointed to by _permissionDomainId and _childSkillIndex
-|_fromChildSkillIndex|uint256|In the array of child skills for the skill associated with the domain pointed to by _permissionDomainId + _childSkillIndex, the index of the skill associated with the domain that contains _fromPot
+|_fromChildSkillIndex|uint256|In the array of child skills for the skill associated with the domain pointed to by _permissionDomainId + _childSkillIndex,         the index of the skill associated with the domain that contains _fromPot
 |_toChildSkillIndex|uint256|The same, but for the _toPot which the funds are being moved to
 |_fromPot|uint256|Funding pot id providing the funds
 |_toPot|uint256|Funding pot id receiving the funds
@@ -1473,6 +1473,7 @@ Sets the claim delays in given expenditure slots. Can only be called by expendit
 
 Sets the metadata for an expenditure. Can only be called by expenditure owner.
 
+*Note: Can only be called while expenditure is in draft state.*
 
 **Parameters**
 
@@ -1501,6 +1502,7 @@ Sets the metadata for an expenditure. Can only be called by Arbitration role.
 
 Set the token payout on an expenditure slot. Can only be called by expenditure owner.
 
+*Note: Can only be called while expenditure is in draft state.*
 
 **Parameters**
 
@@ -1510,6 +1512,24 @@ Set the token payout on an expenditure slot. Can only be called by expenditure o
 |_slot|uint256|Number of the slot
 |_token|address|Address of the token, `0x0` value indicates Ether
 |_amount|uint256|Payout amount
+
+
+### `setExpenditurePayout`
+
+Set the token payout on an expenditure slot. Can only be called by expenditure owner.
+
+*Note: Can only be called while expenditure is in draft state.*
+
+**Parameters**
+
+|Name|Type|Description|
+|---|---|---|
+|_permissionDomainId|uint256|
+|_childSkillIndex|uint256|
+|_id|uint256|
+|_slot|uint256|
+|_token|address|
+|_amount|uint256|
 
 
 ### `setExpenditurePayoutModifiers`
@@ -1530,6 +1550,7 @@ Sets the payout modifiers in given expenditure slots. Can only be called by expe
 
 Set the token payouts in given expenditure slots. Can only be called by expenditure owner.
 
+*Note: Can only be called while expenditure is in draft state.*
 
 **Parameters**
 
@@ -1545,6 +1566,7 @@ Set the token payouts in given expenditure slots. Can only be called by expendit
 
 Sets the recipient on an expenditure slot. Can only be called by expenditure owner.
 
+*Note: Can only be called while expenditure is in draft state.*
 
 **Parameters**
 
@@ -1559,6 +1581,7 @@ Sets the recipient on an expenditure slot. Can only be called by expenditure own
 
 Sets the recipients in given expenditure slots. Can only be called by expenditure owner.
 
+*Note: Can only be called while expenditure is in draft state.*
 
 **Parameters**
 
@@ -1613,6 +1636,29 @@ Set arbitrary state on an expenditure slot. Can only be called by Arbitration ro
 |_mask|bool[]|Array of booleans indicated whether a key is a mapping (F) or an array index (T).
 |_keys|bytes32[]|Array of additional keys (for mappings & arrays)
 |_value|bytes32|Value to set at location
+
+
+### `setExpenditureValues`
+
+Set many values of an expenditure simultaneously. Can only be called by expenditure owner.
+
+
+**Parameters**
+
+|Name|Type|Description|
+|---|---|---|
+|_id|uint256|
+|_recipientSlots|uint256[]|
+|_recipients|address[]|
+|_skillIdSlots|uint256[]|
+|_skillIds|uint256[]|
+|_claimDelaySlots|uint256[]|
+|_claimDelays|uint256[]|
+|_payoutModifierSlots|uint256[]|
+|_payoutModifiers|int256[]|
+|_payoutTokens|address[]|Addresses of the tokens, `0x0` value indicates Ether
+|_payoutSlots|undefined[]|
+|_payoutValues|undefined[]|
 
 
 ### `setFundingRole`

@@ -20,11 +20,12 @@ pragma experimental ABIEncoderV2;
 
 import "./../../lib/dappsys/math.sol";
 import "./../common/EtherRouter.sol";
+import "./../common/Multicall.sol";
 import "./../colony/IColony.sol";
 import "./../colony/ColonyDataTypes.sol";
 
 
-abstract contract ColonyExtension is DSAuth, DSMath {
+abstract contract ColonyExtension is DSAuth, DSMath, Multicall {
 
   uint256 constant UINT256_MAX = 2**256 - 1;
 
